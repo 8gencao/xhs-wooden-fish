@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>电子木鱼</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background-color: #0d0a07; color: #f6e7c4; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    [hidden] { display: none !important; }
+  </style>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app-shell" class="app-shell">
+    <!-- 顶部栏 -->
+    <header class="top-bar">
+      <div class="brand-group">
+        <div class="brand-title-row">
+          <span class="brand-seal" aria-hidden="true">禅</span>
+          <h1 class="brand-title">电子木鱼</h1>
+        </div>
+        <p class="brand-subtitle">轻敲静心 · 减压祈福 · 积攒今日功德</p>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="btn-theme" class="icon-btn" aria-label="切换深浅色背景" aria-pressed="false" title="切换浅色背景">
+          <svg class="icon-svg icon-theme-light" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 2.5v2.2M12 19.3v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <svg class="icon-svg icon-theme-dark" viewBox="0 0 24 24" aria-hidden="true" hidden>
+            <path d="M20.2 14.8A8.2 8.2 0 0 1 9.2 3.8a8.4 8.4 0 1 0 11 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button type="button" id="btn-sound" class="icon-btn" aria-label="切换音效开关" aria-pressed="true" title="音效开关">
+          <svg class="icon-svg icon-sound-on" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9.5h4.2l5.3-4.2v13.4l-5.3-4.2H4z" fill="currentColor" />
+            <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <svg class="icon-svg icon-sound-off" viewBox="0 0 24 24" aria-hidden="true" hidden>
+            <path d="M4 9.5h4.2l5.3-4.2v13.4l-5.3-4.2H4z" fill="currentColor" />
+            <path d="M16.5 9.5l5 5M21.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button type="button" id="btn-open-card" class="icon-btn" aria-label="生成今日功德卡" title="今日功德卡">
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M8 9h8M8 13h8M9.5 16.5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </button>
+        <button type="button" id="btn-open-settings" class="icon-btn" aria-label="打开设置" title="设置">
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 功德计数与状态区 -->
+    <section class="merit-section" aria-label="功德统计">
+      <div class="hero-card">
+        <span class="hero-label">今 日 功 德</span>
+        <div id="today-count" class="hero-count">0</div>
+        <div class="sub-stats">
+          <div class="sub-stat-item">
+            <span class="sub-stat-label">累计功德</span>
+            <strong id="total-count" class="sub-stat-value">0</strong>
+          </div>
+          <div class="sub-stat-divider" aria-hidden="true"></div>
+          <div class="sub-stat-item">
+            <span class="sub-stat-label">本轮敲击</span>
+            <strong id="session-count" class="sub-stat-value">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="mantra-status-row">
+        <button type="button" id="mantra-chip" class="mantra-chip" aria-label="当前功德飘字，点击切换">
+          <span class="mantra-chip-prefix">飘字</span>
+          <span id="mantra-badge" class="mantra-chip-text">功德 +1</span>
+        </button>
+        <p id="status-text" class="status-text" role="status" aria-live="polite">点击木鱼即可敲击</p>
+      </div>
+    </section>
+
+    <!-- 木鱼主交互舞台 -->
+    <main class="stage-section">
+      <div id="fish-stage" class="fish-stage">
+        <div class="zen-halo" aria-hidden="true"></div>
+        <div id="energy-ring" class="energy-ring" aria-hidden="true"></div>
+
+        <!-- 敲击水波纹池 -->
+        <div id="ripple-layer" class="ripple-layer" aria-hidden="true">
+          <span class="ripple-ring"></span>
+          <span class="ripple-ring"></span>
+          <span class="ripple-ring"></span>
+          <span class="ripple-ring"></span>
+          <span class="ripple-ring"></span>
+          <span class="ripple-ring"></span>
+        </div>
+
+        <!-- 漂浮功德文字池 -->
+        <div id="float-layer" class="float-layer" aria-hidden="true">
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+          <span class="float-text">功德 +1</span>
+        </div>
+
+        <!-- 木鱼 + 木槌按钮 -->
+        <button type="button" id="fish-stage-btn" class="fish-button" aria-label="敲击电子木鱼">
+          <span class="fish-body-wrap">
+            <svg class="fish-svg" viewBox="0 0 320 248" aria-hidden="true">
+              <defs>
+                <radialGradient id="wf-body-grad" cx="40%" cy="34%" r="64%">
+                  <stop offset="0%" stop-color="#cb8747" />
+                  <stop offset="40%" stop-color="#8b4d20" />
+                  <stop offset="76%" stop-color="#53280d" />
+                  <stop offset="100%" stop-color="#281104" />
+                </radialGradient>
+                <linearGradient id="wf-cushion-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#4e2d1a" />
+                  <stop offset="55%" stop-color="#2c170c" />
+                  <stop offset="100%" stop-color="#150a05" />
+                </linearGradient>
+                <linearGradient id="wf-gold-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fae2ab" />
+                  <stop offset="50%" stop-color="#dfb566" />
+                  <stop offset="100%" stop-color="#a8762c" />
+                </linearGradient>
+              </defs>
+
+              <!-- 蒲团底座 -->
+              <ellipse cx="160" cy="212" rx="126" ry="22" fill="url(#wf-cushion-grad)" stroke="rgba(223, 181, 102, 0.45)" stroke-width="1.8" />
+              <ellipse cx="160" cy="208" rx="102" ry="13" fill="none" stroke="rgba(240, 206, 134, 0.2)" stroke-width="1.1" />
+              <ellipse cx="156" cy="201" rx="88" ry="12" fill="rgba(0, 0, 0, 0.48)" />
+
+              <!-- 木鱼本体 -->
+              <path d="M 54 136 C 50 76 102 44 166 46 C 222 48 264 80 274 126 C 280 150 270 178 248 190 C 224 204 182 206 138 205 C 86 204 56 178 54 136 Z"
+                    fill="url(#wf-body-grad)"
+                    stroke="url(#wf-gold-stroke)"
+                    stroke-width="2.6" />
+
+              <!-- 顶部木纹高光 -->
+              <path d="M 92 80 Q 154 50 218 76"
+                    fill="none"
+                    stroke="rgba(255, 232, 184, 0.3)"
+                    stroke-width="3.4"
+                    stroke-linecap="round" />
+
+              <!-- 鱼口声缝 -->
+              <path d="M 55 137 C 90 131 130 135 164 141 C 174 142 180 147 180 152 C 180 158 172 161 162 160 C 128 156 90 153 57 148 Z"
+                    fill="#140702"
+                    stroke="rgba(232, 188, 106, 0.42)"
+                    stroke-width="1.4" />
+
+              <!-- 共鸣孔 -->
+              <circle cx="180" cy="150" r="14" fill="#120602" stroke="rgba(236, 194, 114, 0.65)" stroke-width="2" />
+              <circle cx="180" cy="150" r="6" fill="#090301" />
+
+              <!-- 尾部雕花纹路 -->
+              <path d="M 212 118 C 232 114 248 126 246 144 C 244 159 228 166 216 158"
+                    fill="none"
+                    stroke="rgba(232, 188, 106, 0.52)"
+                    stroke-width="2.1"
+                    stroke-linecap="round" />
+              <path d="M 222 175 Q 244 172 259 156"
+                    fill="none"
+                    stroke="rgba(232, 188, 106, 0.36)"
+                    stroke-width="1.6"
+                    stroke-linecap="round" />
+            </svg>
+          </span>
+
+          <!-- 木槌 -->
+          <span class="mallet-wrap" aria-hidden="true">
+            <svg class="mallet-svg" viewBox="0 0 166 80" aria-hidden="true">
+              <defs>
+                <linearGradient id="wf-handle-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#c98749" />
+                  <stop offset="50%" stop-color="#87491d" />
+                  <stop offset="100%" stop-color="#482108" />
+                </linearGradient>
+                <radialGradient id="wf-mallet-head" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#fff1cf" />
+                  <stop offset="48%" stop-color="#e3b664" />
+                  <stop offset="100%" stop-color="#99641f" />
+                </radialGradient>
+              </defs>
+              <g transform="translate(26, 42) rotate(-14)">
+                <path d="M 8 -5 L 122 -7 Q 130 0 122 7 L 8 5 Z"
+                      fill="url(#wf-handle-grad)"
+                      stroke="#dfb566"
+                      stroke-width="1.4" />
+                <rect x="10" y="-5.5" width="8" height="11" rx="1.5" fill="#e7c378" />
+                <circle cx="0" cy="0" r="17" fill="url(#wf-mallet-head)" stroke="#fae2ab" stroke-width="1.6" />
+              </g>
+            </svg>
+          </span>
+        </button>
+
+        <p class="stage-hint">点击木鱼即可敲击</p>
+      </div>
+    </main>
+
+    <!-- 摇一摇挥锤引导与能量条（开启或提示时展示） -->
+    <section id="shake-panel" class="shake-panel" aria-label="摇一摇挥锤模式" hidden>
+      <div class="shake-header">
+        <span class="shake-guide-text">拿稳手机上下挥动，像挥木槌一样敲击木鱼</span>
+        <div class="shake-sensitivity-group" role="group" aria-label="摇一摇灵敏度">
+          <button type="button" class="sens-pill" data-sens="high">灵敏</button>
+          <button type="button" class="sens-pill is-active" data-sens="medium">适中</button>
+          <button type="button" class="sens-pill" data-sens="low">稳重</button>
+        </div>
+      </div>
+      <div class="energy-meter-wrap" aria-hidden="true">
+        <div class="energy-meter-track">
+          <div id="energy-meter-fill" class="energy-meter-fill"></div>
+        </div>
+        <span id="energy-meter-label" class="energy-meter-label">待机</span>
+      </div>
+      <p id="shake-notice" class="shake-notice" hidden></p>
+    </section>
+
+    <!-- 底部核心操作栏 -->
+    <nav class="action-dock" aria-label="核心控制栏">
+      <button type="button" id="btn-shake" class="dock-btn" aria-pressed="false">
+        <span class="dock-btn-title">摇一摇</span>
+        <span id="shake-btn-sub" class="dock-btn-sub">已关闭</span>
+      </button>
+      <button type="button" id="btn-auto" class="dock-btn" aria-pressed="false">
+        <span class="dock-btn-title">自动敲</span>
+        <span id="auto-btn-sub" class="dock-btn-sub">关闭</span>
+      </button>
+      <button type="button" id="btn-phrase" class="dock-btn">
+        <span class="dock-btn-title">功德飘字</span>
+        <span id="phrase-btn-sub" class="dock-btn-sub">功德 +1</span>
+      </button>
+      <button type="button" id="btn-timbre" class="dock-btn">
+        <span class="dock-btn-title">木鱼音色</span>
+        <span id="timbre-btn-sub" class="dock-btn-sub">清脆檀木</span>
+      </button>
+      <button type="button" id="btn-card" class="dock-btn dock-btn-primary">
+        <span class="dock-btn-title">功德卡</span>
+        <span class="dock-btn-sub">生成分享</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- 设置弹层（含音色、震动、自动敲、摇一摇、飘字预设、致谢） -->
+  <div id="settings-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h2 id="settings-title" class="modal-title">木鱼设置与功德词</h2>
+        <button type="button" id="btn-close-settings" class="modal-close-btn" aria-label="关闭设置">关闭</button>
+      </div>
+      <div class="modal-body scroll-container">
+        <!-- 背景主题 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">背景主题</strong>
+              <span class="setting-desc">切换深色暗金或浅色宣纸护眼背景</span>
+            </div>
+          </div>
+          <div class="chip-grid" role="group" aria-label="选择背景主题">
+            <button type="button" class="choice-chip is-active" data-theme="dark">深色暗金</button>
+            <button type="button" class="choice-chip" data-theme="light">浅色宣纸</button>
+          </div>
+        </div>
+
+        <!-- 音色与声音 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">敲击音效</strong>
+              <span class="setting-desc">本地实时合成，零等待无联网</span>
+            </div>
+            <button type="button" id="set-sound-toggle" class="switch-btn is-on" aria-pressed="true">已开启</button>
+          </div>
+          <div class="chip-grid" role="group" aria-label="选择木鱼音色">
+            <button type="button" class="choice-chip is-active" data-timbre="sandalwood">清脆檀木</button>
+            <button type="button" class="choice-chip" data-timbre="temple">沉稳古木</button>
+            <button type="button" class="choice-chip" data-timbre="bell">空灵清磬</button>
+          </div>
+        </div>
+
+        <!-- 触感震动 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">敲击短振</strong>
+              <span id="set-vibrate-desc" class="setting-desc">小红书 App 9.50+ 支持短振反馈</span>
+            </div>
+            <button type="button" id="set-vibrate-toggle" class="switch-btn is-on" aria-pressed="true">已开启</button>
+          </div>
+        </div>
+
+        <!-- 自动敲击 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">自动敲击节奏</strong>
+              <span class="setting-desc">切到后台自动暂停，切回自动续敲</span>
+            </div>
+          </div>
+          <div class="chip-grid" role="group" aria-label="选择自动敲击节奏">
+            <button type="button" class="choice-chip is-active" data-auto="off">关闭</button>
+            <button type="button" class="choice-chip" data-auto="slow">慢速 1200ms</button>
+            <button type="button" class="choice-chip" data-auto="medium">中速 700ms</button>
+            <button type="button" class="choice-chip" data-auto="fast">快速 350ms</button>
+          </div>
+        </div>
+
+        <!-- 摇一摇 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">摇一摇挥锤（9.50+）</strong>
+              <span class="setting-desc">拿稳手机上下挥动，像挥木槌一样敲击木鱼</span>
+            </div>
+            <button type="button" id="set-shake-toggle" class="switch-btn" aria-pressed="false">已关闭</button>
+          </div>
+          <div class="chip-grid" role="group" aria-label="设置摇一摇灵敏度">
+            <button type="button" class="choice-chip" data-set-sens="high">灵敏</button>
+            <button type="button" class="choice-chip is-active" data-set-sens="medium">适中</button>
+            <button type="button" class="choice-chip" data-set-sens="low">稳重</button>
+          </div>
+          <p id="set-shake-env-hint" class="setting-hint"></p>
+        </div>
+
+        <!-- 功德飘字预设与自定义 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">功德飘字文案</strong>
+              <span class="setting-desc">选择预设短语或自定义祈福词（最多 12 字）</span>
+            </div>
+            <button type="button" id="btn-open-custom-phrase" class="mini-action-btn">+ 自定义</button>
+          </div>
+          <div id="phrase-preset-grid" class="chip-grid" role="group" aria-label="选择飘字预设">
+            <button type="button" class="choice-chip is-active" data-phrase="功德 +1">功德 +1</button>
+            <button type="button" class="choice-chip" data-phrase="烦恼 -1">烦恼 -1</button>
+            <button type="button" class="choice-chip" data-phrase="好运 +1">好运 +1</button>
+            <button type="button" class="choice-chip" data-phrase="暴富 +1">暴富 +1</button>
+            <button type="button" class="choice-chip" data-phrase="水逆退散">水逆退散</button>
+            <button type="button" class="choice-chip" data-phrase="心态稳住">心态稳住</button>
+          </div>
+        </div>
+
+        <!-- 存档与清零 -->
+        <div class="setting-block">
+          <div class="setting-row">
+            <div class="setting-info">
+              <strong class="setting-name">记录功德数据</strong>
+              <span id="set-storage-desc" class="setting-desc">支持在小红书 App 9.46+ 自动保存</span>
+            </div>
+            <button type="button" id="set-save-toggle" class="switch-btn is-on" aria-pressed="true">已开启</button>
+          </div>
+          <div class="danger-actions">
+            <button type="button" id="btn-reset-today" class="ghost-btn">清零今日功德</button>
+            <button type="button" id="btn-reset-all" class="ghost-btn ghost-btn-danger">重置全部功德</button>
+          </div>
+        </div>
+
+        <!-- 开源致谢（纯文本，无外链） -->
+        <div class="attribution-box">
+          <p class="attribution-text">开源致谢：本小工具参考开源项目 jwenjian/wooden-fish（MIT License）设计，全部视觉、音色合成与端能力已针对离线容器重新构建。</p>
+          <p class="attribution-watermark">made by 八根草</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自定义飘字短语 Modal（页内输入弹窗） -->
+  <div id="phrase-modal" class="modal-backdrop modal-backdrop-center" role="dialog" aria-modal="true" aria-labelledby="phrase-modal-title" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="phrase-modal-title" class="modal-title">自定义飘字短语</h2>
+        <button type="button" id="btn-close-phrase" class="modal-close-btn" aria-label="关闭弹窗">取消</button>
+      </div>
+      <form id="custom-phrase-form" class="phrase-form">
+        <label for="custom-phrase-input" class="phrase-label">输入敲击时漂浮的短语（最多 12 字）</label>
+        <input id="custom-phrase-input" class="phrase-input" type="text" maxlength="12" autocomplete="off" placeholder="例如：平静自在 +1" />
+        <div class="phrase-meta">
+          <span id="phrase-error" class="phrase-error" role="status"></span>
+          <span id="phrase-char-count" class="phrase-char-count">0 / 12</span>
+        </div>
+        <div class="modal-card-actions">
+          <button type="button" id="btn-cancel-phrase" class="ghost-btn">取消</button>
+          <button type="submit" id="btn-save-phrase" class="primary-btn">确认使用</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 确认清零 Modal -->
+  <div id="confirm-modal" class="modal-backdrop modal-backdrop-center" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+    <div class="modal-card">
+      <h2 id="confirm-title" class="modal-title">确认操作</h2>
+      <p id="confirm-message" class="confirm-message">确定要清零吗？此操作不可撤销。</p>
+      <div class="modal-card-actions">
+        <button type="button" id="btn-confirm-cancel" class="ghost-btn">取消</button>
+        <button type="button" id="btn-confirm-ok" class="primary-btn primary-btn-danger">确认清零</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 功德卡预览弹窗 -->
+  <div id="card-modal" class="modal-backdrop modal-backdrop-center" role="dialog" aria-modal="true" aria-labelledby="card-modal-title" hidden>
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <h2 id="card-modal-title" class="modal-title">今日功德签</h2>
+        <button type="button" id="btn-close-card" class="modal-close-btn" aria-label="关闭功德卡">关闭</button>
+      </div>
+      <div class="modal-body scroll-container card-modal-body">
+        <div class="card-preview-frame">
+          <img id="card-preview-img" class="card-preview-img" alt="今日功德签预览" />
+        </div>
+        <p id="card-feedback" class="card-feedback" role="status" aria-live="polite" hidden></p>
+        <p id="card-env-notice" class="card-env-notice" hidden>当前不在小红书 App 容器内，请在小红书 App 中打开后使用保存相册、发笔记、评论区晒功德与分享功能。</p>
+        <div id="card-actions" class="card-actions">
+          <button type="button" id="btn-card-save" class="card-action-btn" hidden>保存相册</button>
+          <button type="button" id="btn-card-note" class="card-action-btn" hidden>发小红书笔记</button>
+          <button type="button" id="btn-card-comment" class="card-action-btn" hidden>评论区晒功德</button>
+          <button type="button" id="btn-card-share" class="card-action-btn card-action-primary" hidden>分享</button>
+          <button type="button" id="btn-card-share-card" class="card-action-btn" hidden>分享工具卡片</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="./xhs-bridge.js"></script>
+  <script defer src="./audio-motion.js"></script>
+  <script defer src="./share-card.js"></script>
+  <script defer src="./app.js"></script>
+</body>
+</html>

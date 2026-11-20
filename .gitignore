@@ -1,0 +1,6 @@
+upstream/
+.DS_Store
+**/.DS_Store
+*.tmp
+media/*-raw.*
+media/*_raw.*
